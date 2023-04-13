@@ -1,0 +1,99 @@
+{% extends "base.html"%}
+{% block page_content %}
+{% load static %}
+<div class="container">
+   <div class="row pt-4 pb-4">
+      {% if cart_items %}
+      <div class="col-12">
+         <h2>My Cart</h2>
+      </div>
+      <div class="col-12">
+         <div class="col-12 table-responsive">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th scope="col">Product</th>
+                     <th scope="col">Description</th>
+                     <th scope="col">Quantity</th>
+                     <th scope="col">Total</th>
+                     <th scope="col"></th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for item in cart_items %}
+                  <form class="form-inline" action="{% url 'update_cart_item' forloop.counter%}" method="post">
+                     {% csrf_token %}
+                     <tr>
+                        <th scope="row">
+                           {% for image in item.single_product.productimage_set.all %}
+                           {% if image.featured %}
+                           <a href="{{ item.single_product.get_absolute_url}}"><img style="width:80px;height:80px" class="img-responsive" src="{{MEDIA_URL}}{{ image.image }}" alt=""></a><br>
+                           {% endif %}
+                           {% endfor %}
+                        </th>
+                        <td>
+                           {{item.single_product.title}}<br>
+                           {% for flavour_item in item.flavour_name_with_price%}
+                           <small class="text-muted d-block"><i class="fa fa-angle-right" aria-hidden="true"></i>{{flavour_item}}</small>
+                           {% endfor %}
+                        </td>
+                        <td>
+                           <input input_data_id={{ forloop.counter }} type="number" onchange="checkQuantity({{ forloop.counter }})" id="item_{{forloop.counter}}" class="form-control w-50 d-inline pt-1 update_quantity" name="update_quantity" value="{{item.quantity|add:0}}" min="1">
+                           <input type="submit" class="btn btn-md btn-info" id="update_item_{{forloop.counter}}" name="" value="Update">
+                        </td>
+                        <td>
+                           (€{{item.product_price}}
+                           {% for flavour in item.flavour_objects_array%}
+                           {% if flavour.price > 0 %}
+                           +€{{flavour.price}}
+                           {% endif%}
+                           {% endfor %})X{{item.quantity}}
+                           = €{{ item.total}}
+                        </td>
+                        <td><a href="{% url 'remove_item' forloop.counter %}" class="text-danger" name="button"><i class="far fa-times-circle"></i></a></td>
+                     </tr>
+                  </form>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+         <div class="col-12 bg-light">
+            <div class="row p-2">
+               <div class="row w-100 p-0">
+                  <div class="col-9 text-right p-0">
+                     <strong>Subtotal:</strong>
+                  </div>
+                  <div class="col-3 p-0 pl-2">
+                     <strong class="text-danger">€{{sub_total}}</strong>
+                  </div>
+               </div>
+               <div class="row w-100 p-0">
+                  <div class="col-9 text-right p-0">
+                     <strong>Shipping Price:</strong>
+                  </div>
+                  <div class="col-3 p-0 pl-2">
+                     <strong class="text-danger">€{{shipping_charge}}</strong>
+                  </div>
+               </div>
+               <div class="row w-100 p-0">
+                  <div class="col-9 text-right p-0">
+                     <strong class="h5">Total:</strong>
+                  </div>
+                  <div class="col-3 p-0 pl-2">
+                     <strong class="h5 text-danger">€{{grand_total}}</strong>
+                  </div>
+               </div>
+               <hr class="col">
+               <a href="{% url 'checkout'%}" class="btn btn-lg btn-warning col-12 mb-3" name="button">Secure Checkout <i class="fas fa-lock"></i></i></a>
+               <a href="{% url 'all_cakes'%}" class="btn btn-lg btn-info col-12"><i class="fas fa-chevron-left"></i> Continue Shopping</a>
+            </div>
+         </div>
+      </div>
+      {% else %}
+      <h2 class="m-auto">Your cart is empty!</h2>
+      <br><br><br><br>
+      <p class="w-100 text-center"><a href="{% url 'all_cakes'%}" class="btn btn-info"><i class="fas fa-chevron-left"></i> Continue Shopping</a></p>
+      {% endif%}
+   </div>
+</div>
+{% endblock %}

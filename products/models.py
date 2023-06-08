@@ -1,6 +1,5 @@
 from django.urls import reverse
 from django.db import models
-# Create your models here.
 
 # this is product category
 class Category(models.Model):
@@ -25,7 +24,7 @@ TIER_SIZE = (
     ('cup cakes','cup cakes'),
 )
 
-# cakesize category for different size of cake
+# cakeSize category for different size of cake
 class CakeSizeCategory(models.Model):
     size = models.CharField(max_length=120)
     tier = models.CharField(max_length=120, choices=TIER_SIZE, default='none')

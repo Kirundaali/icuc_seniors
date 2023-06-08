@@ -1,3 +1,6 @@
+from email import message
+from pydoc import stripid
+from django.forms import EmailField
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
@@ -6,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.base_user import BaseUserManager
+from S_cakes.settings import STRIPE_SECRET_KEY
 from accounts.forms import ShippingAddressForm, UserRegisterForm
 from accounts.models import ShippingAddress, Customer
 from .forms import OrderForm
@@ -87,7 +91,7 @@ def checkout(request):
                             # create new user
                             user = register_form.save()
                             #create new customer
-                            Customer.objects.create(user=user,email= email,name=request.POST['full_name'],phone=request.POST['phone_number'])
+                            Customer.objects.create(user=user,email= EmailField,name=request.POST['full_name'],phone=request.POST['phone_number'])
 
                             # auto login
                             new_user = authenticate(username=username,password=password)
@@ -190,9 +194,9 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     stripe_total = round(cart_content_list['grand_total'] * 100)
-    stripe.api_key = stripe_secret_key
+    stripid.api_key = stripe_secret_key
     # create stripe payment token
-    intent = stripe.PaymentIntent.create(
+    intent = stripid.PaymentIntent.create(
         amount = stripe_total,
         currency = settings.STRIPE_CURRENCY,
     )
@@ -200,7 +204,7 @@ def checkout(request):
 
 
     if not stripe_public_key:
-        message.warning(request,'Stripe puclic key is missing. Did you forget to set it your environment?')
+        message.warning(request,'Stripe public key is missing. Did you forget to set it your environment?')
     context = {
         'title':'Checkout',
         'is_login':is_login,
@@ -240,7 +244,7 @@ def create_order(request,is_login,cart_content_list,shipping_address):
             address_line_2=request.POST['address_line_2'],
             address_line_3=request.POST['address_line_3'],
             city=request.POST['city'],
-            eircode=request.POST['eircode'],
+            eircode=request.POST['errcode'],
             delivery_cost=cart_content_list['shipping_charge'],
             order_total=cart_content_list['sub_total'],
             grand_total=cart_content_list['grand_total'],

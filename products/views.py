@@ -29,7 +29,7 @@ def all_cakes(request):
     sort = None
     active_category = 'all-cakes'
     order_by_active = 'date'
-    bradcrumb_list = ['all-cakes']
+    breadcrumb_list = ['all-cakes']
     products = Product.objects.all()
     count_all_products = products.count()
     pagination_path = request.path+'?'
@@ -88,7 +88,7 @@ def all_cakes(request):
         'title':title,
         'active_category'       :active_category,
         'order_by_active'       :order_by_active,
-        'bradcrumb_list'        :bradcrumb_list,
+        'breadcrumb_list'        :breadcrumb_list,
         'all_category'          :all_category,
         'paginator'             :paginator_array[1],
         'products'              :products,
@@ -100,7 +100,7 @@ def all_cakes(request):
     return render(request, 'products/all-cakes.html',context)
 #
 
-# this class mainly use for single products view user products options controll and validation
+# this class mainly use for single products view user products options control and validation
 # this is add to cart product variation options control
 class Options:
     slug                            = None
@@ -167,7 +167,7 @@ class Options:
                 return self.cake_flavour_id
 
     # this function return true and false check cake size id
-    def is_falvour(self):
+    def is_flavour(self):
         if self.cake_size_id>0:
             return True
 
@@ -196,9 +196,9 @@ class Options:
                 return False
 
 # this is single product/cake view
-def single_product(request, slug):
+def single_product(request,slug):
     single_product          = get_object_or_404(Product, slug=slug)
-    bradcrumb_list          = ['cake-shop',slug]
+    breadcrumb_list          = ['cake-shop',slug]
     options                 = Options()
     options.id              = int(single_product.id)
     options.slug            = slug
@@ -220,7 +220,7 @@ def single_product(request, slug):
         'title'         :'',
         'slug'          :slug,
         'quantity'      :request.POST.get('item_quantity'),
-        'bradcrumb_list':bradcrumb_list,
+        'breadcrumb_list':breadcrumb_list,
         'single_product':single_product,
         'star_loop'     :range(1,6),
         'options'       :options,

@@ -1,9 +1,7 @@
 from django.contrib import admin
-#from .models import Product, CakeCategory, ProductImage, Flavour, Variation, CakeSizeCategory
 from .models import Product, ProductImage, Variation, Category, FlavourCategory, Flavour, CakeSizeCategory
-# Register your models here.
 
-# register for cake category
+
 @admin.register(Category)
 class ProductCakeSizeCategory(admin.ModelAdmin):
     list_display = ['category_name','category_slug', 'updated', 'active']
@@ -25,11 +23,11 @@ class FlavourAdmin(admin.ModelAdmin):
 class ProductCakeSizeCategory(admin.ModelAdmin):
     list_display = ['size','tier', 'active']
 
-# this class for product images inside product proudct panel
+# this class for product images inside product panel
 class ProductImageAdmin(admin.StackedInline):
     model=ProductImage
 
-# this class for product price variation inside product proudct panel
+# this class for product price variation inside product product panel
 class ProductPriceVariation(admin.StackedInline):
     model=Variation
 

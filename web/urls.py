@@ -10,8 +10,8 @@ urlpatterns = [
     #path('<slug:slug>/', product_view.single_product, name="single_product"),
     # path('product-category/<slug:p_cat>/', product_view.product_category, name="product_category_page"),
     #
-    # path('about-us', views.about, name="about"),
-    # path('cake-flavours', views.cake_flavours, name="cake_flavours"),
+    path('about-us', views.about, name="about"),
+    path('cake-flavours', views.cake_flavours, name="cake_flavours"),
     # path('contacts', views.contacts, name="contacts"),
     # path('frequently-asked-questions', views.faqs, name="faqs"),
     # # products url

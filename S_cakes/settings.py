@@ -24,6 +24,8 @@ SECRET_KEY = 'django-insecure-te-py1qgqcr_83el6c7)h(63*h46j+jiq@)4__3v-+)^buh1do
 SECRET_KEY = os.environ.get("SECRET_KEY", "1234")
 
 # SECURITY WARNING: don't run with debug turned on in production!
+INTERNAL_IPS = ['127.0.0.1']
+
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'cart',
     # Others
     'crispy_forms',
+    'debug_toolbar',
     
 ]
 
@@ -160,7 +163,7 @@ if "USE_AWS" in os.environ:
     DEFAULT_FILE_STORAGE = "custom_storages.MediaStorage"
     MEDIAFILES_LOCATION = "media"
 
-    # Ovverride staic and media urls in production
+    # Override static and media urls in production
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/"
 else:
